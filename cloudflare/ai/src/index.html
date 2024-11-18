@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChatGPT UI</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .chat-container {
+      width: 400px;
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .message-box {
+      height: 300px;
+      overflow-y: scroll;
+      padding-right: 10px;
+      margin-bottom: 20px;
+    }
+    .input-box {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+    .send-btn {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .send-btn:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+    .message {
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 5px;
+    }
+    .user-message {
+      background-color: #e2e2e2;
+      text-align: right;
+    }
+    .ai-message {
+      background-color: #d1f7d1;
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <div class="message-box" id="message-box"></div>
+    <textarea id="user-input" class="input-box" placeholder="Type your message..."></textarea>
+    <button id="send-btn" class="send-btn" onclick="sendMessage()">Send</button>
+  </div>
+
+  <script>
+    const messageBox = document.getElementById('message-box');
+    const userInput = document.getElementById('user-input');
+    const sendBtn = document.getElementById('send-btn');
+
+    // Send message to AI function
+    async function sendMessage() {
+      const message = userInput.value.trim();
+      if (!message) return;
+
+      // Display user message
+      displayMessage(message, 'user');
+      userInput.value = '';
+      sendBtn.disabled = true;
+
+      try {
+        const response = await fetch('http://localhost:8787', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ prompt: message })
+        });
+
+        const data = await response.json();
+        const aiResponse = data.response || "Sorry, I couldn't understand.";
+
+        // Display AI response
+        displayMessage(aiResponse, 'ai');
+      } catch (error) {
+        console.error('Error:', error);
+        displayMessage("Sorry, something went wrong.", 'ai');
+      } finally {
+        sendBtn.disabled = false;
+      }
+    }
+
+    // Function to append messages
+    function displayMessage(message, sender) {
+      const messageElement = document.createElement('div');
+      messageElement.classList.add('message', `${sender}-message`);
+      messageElement.innerText = message;
+      messageBox.appendChild(messageElement);
+      messageBox.scrollTop = messageBox.scrollHeight;
+    }
+  </script>
+</body>
+</html>
