@@ -2,7 +2,7 @@
 
 ## What's this ?
 
-​	This is a terminal application that you can run interactive ai in your own computer  terminal, which requires you have follow prerequisites. 
+​    This is a terminal application that you can run interactive ai in your own computer  terminal, which requires you have follow prerequisites. 
 
 ## Prerequisite 
 
