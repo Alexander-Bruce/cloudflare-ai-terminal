@@ -8,7 +8,7 @@
 
 - **Cluodflare workers**
 
-  Register an account in [Cloudflare](https://www.cloudflare.com) then head to `Worker and Pages` and enable it.
+  Register an account in [Cloudflare](https://www.cloudflare.com) then head to tag `Workers and Pages` and enable it.
 
 - **Node js** 
 
