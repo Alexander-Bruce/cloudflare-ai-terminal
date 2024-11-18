@@ -18,7 +18,8 @@
 
 - `git clone https://github.com/Alexander-Bruce/cloudflare-ai-terminal.git`
 - **Deploy Workers**
-  - `cd clodflare`
+  - `cd clodflare/ai`
+  - `npm install`
   - `npx wrangler login`
   - `npx wrangler deploy`
 - **Run interactive terminal** 
