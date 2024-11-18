@@ -24,7 +24,7 @@
 - **Run interactive terminal** 
   - `cd interactive-terminal`
   - `vim index.js`
-  - Replace the following URL  `https://xxxxxx/` with your own page
+  - Replace the following URL  `https://xxxxxx/` with your own page's
   - `npm install` 
   - `npm start`
 
