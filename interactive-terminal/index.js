@@ -1,24 +1,30 @@
+import readline from 'readline';
+import chalk from 'chalk';
+import axios from 'axios';
+import ora from 'ora';
 import { marked } from 'marked';
 import TerminalRenderer from 'marked-terminal';
-import axios from 'axios';
-import readlineSync from 'readline-sync';  
-import chalk from 'chalk';
-import ora from 'ora';
 
 marked.setOptions({
   renderer: new TerminalRenderer(),
-  mangle: false,     
-  headerIds: false,  
+  mangle: false,
+  headerIds: false,
 });
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
+
+rl.input.setEncoding('utf8'); 
 
 let isChatting = false;
 
 async function sendMessage(message) {
   try {
     const spinner = ora(chalk.blue('Sending message to AI...')).start();
-    
-    // replace the url with your own Workers's page
-    const response = await axios.post('https://xxxxxx/', {
+
+    const response = await axios.post('https://xxxxx', {
       prompt: message
     }, {
       headers: {
@@ -42,22 +48,23 @@ async function sendMessage(message) {
 
 function startConversation() {
   console.log(chalk.yellow("Conversation started. Please enter your message..."));
-  chatLoop();  
+  chatLoop();
 }
 
 function chatLoop() {
   if (isChatting) {
-    const message = readlineSync.question(chalk.cyan('You: '));  
+    rl.question(chalk.cyan('You: '), (message) => {
+      if (message.toLowerCase() === '@stop') {
+        console.log(chalk.yellow("Conversation ended."));
+        isChatting = false;
+        rl.close();
+        process.exit();
+        return;
+      }
 
-    if (message.toLowerCase() === '@stop') {
-      console.log(chalk.yellow("Conversation ended."));
-      isChatting = false;
-      process.exit();  
-      return;
-    }
-
-    sendMessage(message).then(() => {
-      chatLoop();  
+      sendMessage(message).then(() => {
+        chatLoop();
+      });
     });
   }
 }
